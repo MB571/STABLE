@@ -16,7 +16,9 @@
     :root {
       --bg:           #ffffff;
       --surface:      #f8fafc;
+      --surface2:     #f1f5f9;
       --border:       #e2e8f0;
+      --border2:      #cbd5e1;
       --text:         #0f172a;
       --text-dim:     #475569;
       --text-muted:   #94a3b8;
@@ -24,6 +26,7 @@
       --accent-dark:  #0e7490;
       --accent-light: #e0f9ff;
       --success:      #059669;
+      --warn:         #d97706;
     }
 
     html { background: var(--bg); }
@@ -37,20 +40,22 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 48px 24px 80px;
+      justify-content: flex-start;
+      padding: 48px 24px 100px;
     }
 
     .card {
       width: 100%;
-      max-width: 360px;
-      text-align: center;
+      max-width: 380px;
     }
 
     /* ── Logo ── */
-    .logo { margin-bottom: 56px; }
+    .logo {
+      text-align: center;
+      margin-bottom: 36px;
+    }
 
-    .icon {
+    .logo-icon {
       width: 72px;
       height: 72px;
       background: linear-gradient(145deg, #0891b2, #06b6d4);
@@ -59,8 +64,8 @@
       align-items: center;
       justify-content: center;
       font-size: 34px;
-      margin-bottom: 18px;
-      box-shadow: 0 6px 24px rgba(8,145,178,0.22);
+      margin-bottom: 16px;
+      box-shadow: 0 6px 22px rgba(8,145,178,0.20);
     }
 
     h1 {
@@ -68,84 +73,173 @@
       font-weight: 800;
       letter-spacing: -1px;
       color: var(--text);
-      margin-bottom: 8px;
+      margin-bottom: 7px;
     }
 
-    .sub {
+    .tagline {
       font-size: 14px;
       color: var(--text-muted);
       line-height: 1.55;
     }
 
+    /* ── Disclaimer ── */
+    .disclaimer {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 22px;
+    }
+
+    .disclaimer-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--accent);
+      margin-bottom: 7px;
+    }
+
+    .disclaimer p {
+      font-size: 12px;
+      color: var(--text-dim);
+      line-height: 1.65;
+    }
+
+    .disclaimer summary {
+      font-size: 12px;
+      color: var(--accent);
+      cursor: pointer;
+      margin-top: 6px;
+      list-style: none;
+      display: inline-block;
+    }
+
+    .disclaimer summary::-webkit-details-marker { display: none; }
+
+    .disclaimer-extra {
+      margin-top: 8px;
+      font-size: 11.5px;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
     /* ── Begin button ── */
     #beginBtn {
       width: 100%;
-      padding: 22px;
+      padding: 21px;
       background: var(--accent);
       color: #fff;
       border: none;
-      border-radius: 16px;
+      border-radius: 15px;
       font-size: 17px;
       font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 4px 20px rgba(8,145,178,0.30);
+      box-shadow: 0 4px 18px rgba(8,145,178,0.28);
       transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
       -webkit-tap-highlight-color: transparent;
     }
 
-    #beginBtn:hover  { background: var(--accent-dark); box-shadow: 0 6px 26px rgba(8,145,178,0.38); }
+    #beginBtn:hover  { background: var(--accent-dark); box-shadow: 0 6px 24px rgba(8,145,178,0.36); }
     #beginBtn:active { transform: scale(0.98); }
 
-    /* ── Progress ── */
-    #prog {
-      display: none;
-      margin-bottom: 28px;
-    }
+    /* ── Progress section ── */
+    #prog { display: none; }
 
     .phase-text {
-      font-size: 15px;
-      color: var(--text-dim);
-      margin-bottom: 18px;
-      min-height: 22px;
+      font-size: 14.5px;
       font-weight: 500;
+      color: var(--text-dim);
+      text-align: center;
+      margin-bottom: 14px;
+      min-height: 21px;
+      font-style: italic;
     }
 
     .bar-track {
-      height: 6px;
-      background: var(--border);
-      border-radius: 3px;
+      height: 7px;
+      background: var(--surface2);
+      border-radius: 4px;
       overflow: hidden;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .bar-fill {
       height: 100%;
       background: linear-gradient(to right, var(--accent), #06b6d4);
-      border-radius: 3px;
+      border-radius: 4px;
       width: 0%;
-      transition: width 0.7s ease;
+      transition: width 0.55s ease;
     }
 
     .bar-pct {
-      font-size: 12px;
+      font-size: 11.5px;
       color: var(--text-muted);
       text-align: right;
+      margin-bottom: 18px;
+    }
+
+    /* ── Phase list ── */
+    #phaseList {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .pr {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.2s;
+    }
+
+    .pr:last-child { border-bottom: none; }
+
+    .pr.pr-active { background: var(--accent-light); }
+
+    .pd {
+      width: 18px;
+      font-size: 13px;
+      text-align: center;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    .pd-pending  { color: var(--text-muted); }
+    .pd-active   { color: var(--accent); }
+    .pd-done     { color: var(--success); }
+    .pd-skipped  { color: var(--text-muted); opacity: 0.5; }
+
+    .pl {
+      font-size: 12px;
+      color: var(--text-muted);
+      flex: 1;
+    }
+
+    .pr-active .pl {
+      color: var(--text);
+      font-weight: 600;
     }
 
     /* ── Complete ── */
     #complete {
       display: none;
-      margin-bottom: 24px;
+      text-align: center;
+      margin-bottom: 18px;
     }
 
-    .check {
-      font-size: 44px;
+    .check-icon {
+      font-size: 42px;
       display: block;
       margin-bottom: 10px;
     }
 
     .complete-title {
-      font-size: 18px;
+      font-size: 19px;
       font-weight: 700;
       color: var(--text);
       margin-bottom: 5px;
@@ -175,12 +269,14 @@
       border: 1px solid rgba(8,145,178,0.18);
     }
 
+    /* ── Divider ── */
+    .divider { height: 1px; background: var(--border); margin: 20px 0; }
+
     /* ── Stop button ── */
     #stopBtn {
       display: none;
       width: 100%;
       padding: 16px;
-      margin-top: 10px;
       background: transparent;
       color: var(--text-muted);
       border: 1.5px solid var(--border);
@@ -195,10 +291,7 @@
     #stopBtn:hover { background: #fef2f2; border-color: #fca5a5; color: #dc2626; }
 
     /* ── Tips ── */
-    #tips {
-      display: none;
-      margin-top: 22px;
-    }
+    #tips { display: none; margin-top: 20px; }
 
     .tip {
       display: flex;
@@ -206,22 +299,14 @@
       gap: 11px;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 13px;
+      border-radius: 12px;
       padding: 14px 16px;
-      text-align: left;
       margin-bottom: 10px;
     }
 
-    .tip:last-child { margin-bottom: 0; }
+    .tip-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
 
-    .tip-icon { font-size: 19px; flex-shrink: 0; margin-top: 1px; }
-
-    .tip-body {
-      font-size: 12.5px;
-      color: var(--text-dim);
-      line-height: 1.65;
-    }
-
+    .tip-body { font-size: 12.5px; color: var(--text-dim); line-height: 1.65; }
     .tip-body strong { color: var(--text); display: block; margin-bottom: 2px; }
 
     /* ── Lock toggle ── */
@@ -231,17 +316,11 @@
       justify-content: space-between;
     }
 
-    .lock-label {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-dim);
-    }
-
     .tog {
       width: 44px;
       height: 26px;
       border-radius: 13px;
-      background: var(--border);
+      background: var(--border2);
       position: relative;
       cursor: pointer;
       transition: background 0.2s;
@@ -258,7 +337,7 @@
       top: 3px;
       left: 3px;
       transition: transform 0.18s;
-      box-shadow: 0 1px 5px rgba(0,0,0,0.18);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.16);
     }
 
     .tog.on { background: var(--accent); }
@@ -270,7 +349,7 @@
       bottom: 0; left: 0; right: 0;
       background: var(--bg);
       border-top: 1px solid var(--border);
-      padding: 11px 20px;
+      padding: 10px 20px;
       text-align: center;
       font-size: 11px;
       color: var(--text-muted);
@@ -285,47 +364,61 @@
 
   <!-- Logo -->
   <div class="logo">
-    <div class="icon">🦴</div>
+    <div class="logo-icon">🦴</div>
     <h1>STABLE</h1>
-    <p class="sub">Free bone conduction tremor relief.<br>Adapts to you automatically.</p>
+    <p class="tagline">Free bone conduction tremor relief.<br>Listens, adapts, and tunes to you automatically.</p>
+  </div>
+
+  <!-- Disclaimer — always visible -->
+  <div class="disclaimer">
+    <div class="disclaimer-title">Wellness Tool — Important Notice</div>
+    <p>STABLE is a free personal wellness tool, not a medical device. It has not been approved or evaluated by the FDA, CE, or any regulatory body, and does not diagnose, treat, or cure any condition. Do not use as a substitute for prescribed medication or neurological care.</p>
+    <details>
+      <summary>Full disclaimer ▾</summary>
+      <div class="disclaimer-extra">
+        STABLE should not be used by people with cochlear implants, cardiac pacemakers, or epilepsy, or by anyone with a sensitivity to audio or vibration stimulation. Individual responses to frequency stimulation vary significantly. If you experience dizziness, increased discomfort, or worsening symptoms at any point, stop immediately. Always consult your neurologist before beginning any new therapeutic practice. The audio channels in STABLE are based on published research in vibrotactile stimulation and neural entrainment, but their application via bone conduction headphones has not been validated in clinical trials.
+      </div>
+    </details>
   </div>
 
   <!-- Stage 1: idle -->
   <button id="beginBtn" onclick="begin()">Begin Session</button>
 
-  <!-- Stage 2: tuning in progress -->
+  <!-- Stage 2: tuning -->
   <div id="prog">
+    <div class="divider"></div>
     <div class="phase-text" id="phaseText">Starting…</div>
     <div class="bar-track"><div class="bar-fill" id="barFill"></div></div>
-    <div class="bar-pct"   id="barPct">0%</div>
+    <div class="bar-pct" id="barPct">0%</div>
+    <div id="phaseList"></div>
   </div>
 
   <!-- Stage 3: complete -->
   <div id="complete">
-    <span class="check">✓</span>
+    <span class="check-icon">✓</span>
     <div class="complete-title">Your frequencies are ready</div>
-    <div class="complete-note" id="completeNote">Audio is looping continuously.</div>
+    <div class="complete-note" id="completeNote"></div>
     <div class="pills" id="pills"></div>
   </div>
 
-  <!-- Stop (shown during session) -->
+  <!-- Stop -->
   <button id="stopBtn" onclick="end()">End Session</button>
 
-  <!-- Tips (shown once started) -->
+  <!-- Tips -->
   <div id="tips">
     <div class="tip">
       <span class="tip-icon">🎧</span>
       <div class="tip-body">
         <strong>Set headphone volume to maximum</strong>
-        The app plays at a safe level. Maximum headphone volume ensures the mechanical vibration through bone is strong enough to be therapeutic.
+        Higher headphone volume means stronger mechanical vibration through bone — essential for the therapeutic effect. The app mixes audio at a safe level internally.
       </div>
     </div>
-    <div class="tip" id="lockTip">
+    <div class="tip" id="lockTip" style="display:none">
       <span class="tip-icon">🔒</span>
       <div class="tip-body lock-row">
         <div>
           <strong>Keep playing when screen locks</strong>
-          Audio continues in the background via MediaSession.
+          Registers with your phone's media system. Works on most Android browsers. See README for iPhone guidance.
         </div>
         <div class="tog" id="lockTog" onclick="toggleLock()" style="margin-left:14px"></div>
       </div>
@@ -343,30 +436,101 @@
 // ================================================================
 // STABLE — Adaptive Bone Conduction Tremor Therapy
 // ================================================================
-// Four scientific audio channels, all faded in gently from silence.
-// The gyroscope tunes the binaural beat to your exact tremor frequency.
-// Channels that appear to worsen tremor are automatically muted.
+// Each frequency channel is tested individually:
+//   1. Start at a low "quiet" volume
+//   2. Ramp up to a test level
+//   3. Measure whether tremor amplitude decreases
+//   4. If helpful: slowly reduce volume to find the minimum effective dose
+//   5. If not helpful (or worsening): mute the channel and move on
+// No channel is ever forced continuously — each earns its place.
 // ================================================================
 
-// ── Global state ─────────────────────────────────────────────────
-let ctx    = null;   // AudioContext
-let master = null;   // master GainNode
-let active = false;
-let locked = false;
-let phaseTO = null;
+// ── Thresholds ───────────────────────────────────────────────────
+const TREMOR_THRESHOLD = 0.40;  // RMS confirming real tremor (m/s²)
+const HELPFUL_DELTA    = 0.08;  // channel "helps" if tremor drops ≥ 8%
+const HARMFUL_DELTA    = 0.10;  // channel "hurts" if tremor rises ≥ 10%
+const TEST_GAIN        = 0.30;  // gain during test ramp
+const MIN_GAIN         = 0.08;  // minimum useful gain (below this: sub-perceptual)
 
-// Motion
-const BUF_N    = 128;
-const SAMP_HZ  = 60;
-let   motBuf   = [];
-let   tHz      = 6;     // detected tremor frequency
-let   tRms     = 0;     // detected tremor amplitude
-let   baseline = 0.5;   // RMS before audio starts
+// ── Phase definitions ─────────────────────────────────────────────
+// barStart/barEnd: the progress bar range this phase animates across
+const PHASES = [
+  { id:'baseline', label:'Detecting tremor baseline',           barStart:0,  barEnd:14 },
+  { id:'vibro',    label:'Testing vibrotactile 100 Hz',         barStart:14, barEnd:33 },
+  { id:'gamma',    label:'Testing gamma 40 Hz',                 barStart:33, barEnd:54 },
+  { id:'binaural', label:'Matching binaural beat to tremor',    barStart:54, barEnd:72 },
+  { id:'noise',    label:'Testing stochastic resonance noise',  barStart:72, barEnd:86 },
+  { id:'final',    label:'Finalising your personal blend',      barStart:86, barEnd:100},
+];
 
-// Channel gain nodes (accessed by key: 'v' 'g' 'b' 'n')
+// ── Application state ─────────────────────────────────────────────
+let ctx       = null;   // AudioContext
+let master    = null;   // master GainNode
+let active    = false;
+let locked    = false;
+
+// Cancellable sleep
+let sleepHandle = null;
+
+// Audio channel nodes, keyed by 'v' 'g' 'b' 'n'
 const N = {};
 
-// ── Audio helpers ─────────────────────────────────────────────────
+// Per-channel results
+const helpful  = { v:false, g:false, b:false, n:false };
+const bestGain = { v:TEST_GAIN, g:TEST_GAIN, b:TEST_GAIN, n:0.032 };
+
+// Motion / tremor
+const BUF_N   = 128;
+const SAMP_HZ = 60;
+let motBuf    = [];
+let tHz       = 6;      // detected tremor frequency (Hz)
+let tRms      = 0;      // detected tremor amplitude (RMS)
+let baseline  = 0.5;    // tremor RMS before any audio
+
+// Bar animation
+let barIntv = null;
+
+// Phase list status: 'pending' | 'active' | 'done' | 'skipped'
+const pSt = {};
+PHASES.forEach(p => { pSt[p.id] = 'pending'; });
+
+// ── Cancellable sleep ─────────────────────────────────────────────
+function sleep(ms) {
+  if (!active) return Promise.resolve(false);
+  return new Promise(resolve => {
+    const id = setTimeout(() => resolve(true), ms);
+    sleepHandle = { id, resolve };
+  });
+}
+
+function cancelSleep() {
+  if (sleepHandle) { clearTimeout(sleepHandle.id); sleepHandle.resolve(false); sleepHandle = null; }
+}
+
+// ── Sample tremor RMS over a duration, return mean ───────────────
+function sampleRms(ms) {
+  return new Promise(resolve => {
+    const readings = [];
+    const id = setInterval(() => { if (tRms > 0) readings.push(tRms); }, 500);
+    setTimeout(() => {
+      clearInterval(id);
+      resolve(readings.length ? readings.reduce((a,b)=>a+b,0)/readings.length : tRms);
+    }, ms);
+  });
+}
+
+// ── Smooth progress bar animation ────────────────────────────────
+function animBar(from, to, dur) {
+  clearInterval(barIntv);
+  const t0 = Date.now();
+  barIntv = setInterval(() => {
+    const f = Math.min((Date.now()-t0)/dur, 1);
+    setPct(from + (to-from)*f);
+    if (f >= 1) clearInterval(barIntv);
+  }, 200);
+}
+
+// ── Audio context ─────────────────────────────────────────────────
 function initCtx() {
   if (ctx) return;
   ctx    = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 44100 });
@@ -375,15 +539,15 @@ function initCtx() {
   master.connect(ctx.destination);
 }
 
-// Smooth ramp — avoids clicks; dur is time constant in seconds
-function ramp(gainNode, target, dur = 2.5) {
-  gainNode.gain.setTargetAtTime(target, ctx.currentTime, dur / 3);
+// Smooth exponential ramp — avoids audible clicks
+function ramp(gainNode, target, tc = 2.5) {
+  if (!ctx || !gainNode) return;
+  gainNode.gain.setTargetAtTime(target, ctx.currentTime, tc / 3);
 }
 
-// ── Channel builders ─────────────────────────────────────────────
-// All start with gain = 0; caller is responsible for ramping up.
+// ── Channel builders (all start at gain = 0) ─────────────────────
 
-function makeVibrotactile(hz = 100) {
+function makeVibro(hz = 100) {
   tearCh('v');
   const g = ctx.createGain(); g.gain.value = 0; g.connect(master);
   const o = ctx.createOscillator(); o.type = 'sine'; o.frequency.value = hz;
@@ -394,9 +558,9 @@ function makeVibrotactile(hz = 100) {
 function makeGamma(hz = 40) {
   tearCh('g');
   const g   = ctx.createGain(); g.gain.value = 0; g.connect(master);
+  // 200 Hz sine carrier, amplitude-modulated at the gamma frequency
   const car = ctx.createOscillator(); car.type = 'sine'; car.frequency.value = 200;
   car.connect(g); car.start();
-  // Amplitude modulate the 200 Hz carrier at gamma frequency → rhythmic pulse
   const mod = ctx.createOscillator(); mod.frequency.value = hz;
   const mg  = ctx.createGain(); mg.gain.value = 0.5;
   mod.connect(mg); mg.connect(g.gain); mod.start();
@@ -413,14 +577,13 @@ function makeBinaural(beat = 6) {
   const rO  = ctx.createOscillator(); rO.type = 'sine'; rO.frequency.value = 200 + beat;
   const rG  = ctx.createGain(); rG.gain.value = 1;
   rO.connect(rG); rG.connect(mrg, 0, 1); rO.start();
-  N.b = { g, mrg, lO, rO };
+  N.b = { g, lO, rO };
 }
 
 function makeNoise() {
   tearCh('n');
-  // Paul Kellet's pink noise approximation — spectrally matches natural sensory noise
-  const rate = ctx.sampleRate;
-  const len  = rate * 4; // 4-second loop
+  // Pink noise — Paul Kellet's algorithm; spectrally matches natural sensory noise
+  const rate = ctx.sampleRate, len = rate * 4;
   const buf  = ctx.createBuffer(1, len, rate);
   const d    = buf.getChannelData(0);
   let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
@@ -440,200 +603,374 @@ function makeNoise() {
 
 function tearCh(k) {
   const n = N[k]; if (!n) return;
-  ['o','car','mod','lO','rO','src','mrg'].forEach(p => {
-    try { n[p]?.stop?.(); n[p]?.disconnect?.(); } catch(_){}
+  ['o','car','mod','lO','rO','src'].forEach(p => {
+    try { n[p]?.stop?.(); n[p]?.disconnect?.(); } catch(_) {}
   });
-  try { n.g.disconnect(); } catch(_){}
+  try { n.g.disconnect(); } catch(_) {}
   delete N[k];
 }
 
 function tearAll() { ['v','g','b','n'].forEach(tearCh); }
 
-// ── Motion / Tremor Detection ─────────────────────────────────────
+// ── Motion / tremor detection ─────────────────────────────────────
 function startMotion() {
   if (typeof DeviceMotionEvent === 'undefined') return;
-  const listen = () => window.addEventListener('devicemotion', onMotion, { passive: true });
+  const go = () => window.addEventListener('devicemotion', onMotion, { passive: true });
   if (typeof DeviceMotionEvent.requestPermission === 'function') {
-    DeviceMotionEvent.requestPermission().then(s => { if (s==='granted') listen(); }).catch(()=>{});
+    DeviceMotionEvent.requestPermission().then(s => { if (s==='granted') go(); }).catch(() => {});
   } else {
-    listen();
+    go();
   }
 }
 
 function onMotion(e) {
   const a = e.accelerationIncludingGravity || e.acceleration;
   if (!a) return;
-  const mag = Math.sqrt((a.x||0)**2+(a.y||0)**2+(a.z||0)**2);
+  const mag = Math.sqrt((a.x||0)**2 + (a.y||0)**2 + (a.z||0)**2);
   motBuf.push(mag);
   if (motBuf.length > BUF_N) motBuf.shift();
-  if (motBuf.length >= BUF_N) compute();
+  if (motBuf.length >= BUF_N) computeTremor();
 }
 
-function compute() {
+function computeTremor() {
   const n    = motBuf.length;
   const mean = motBuf.reduce((a,b)=>a+b,0)/n;
   const c    = motBuf.map(v=>v-mean);
   tRms = Math.sqrt(c.reduce((a,b)=>a+b*b,0)/n);
 
-  // Autocorrelation: find dominant period in 3–12 Hz range (lags 5–20 @ 60 Hz)
-  let lag=10, best=-Infinity;
+  // Autocorrelation for dominant frequency in 3–12 Hz range (lags 5–20 at 60 Hz)
+  let bestLag=10, bestCorr=-Infinity;
   for (let k=5; k<=20; k++) {
-    let s=0;
-    for (let i=0; i<n-k; i++) s += c[i]*c[i+k];
-    s /= (n-k);
-    if (s > best) { best=s; lag=k; }
+    let s=0; for (let i=0; i<n-k; i++) s += c[i]*c[i+k]; s/=(n-k);
+    if (s > bestCorr) { bestCorr=s; bestLag=k; }
   }
-  tHz = tHz*0.85 + (SAMP_HZ/lag)*0.15;
+  tHz = tHz*0.85 + (SAMP_HZ/bestLag)*0.15;
 }
 
-// ── Tuning Pipeline ───────────────────────────────────────────────
-// Five phases, each with a duration and a setup action.
-// After each phase the next fires automatically.
+// ── Minimum effective gain search ─────────────────────────────────
+// After a channel proves helpful, slowly lower its volume.
+// Stop reducing when tremor starts rising back toward baseline.
+// Returns the minimum gain that still provides benefit.
+async function findMinGain(chKey, startGain, durationMs) {
+  const steps   = Math.floor(durationMs / 600);
+  const stepSz  = (startGain - MIN_GAIN) / steps;
+  let curGain   = startGain;
+  let bestRms   = tRms;
 
-const PHASES = [
-  { pct:  0, dur: 14000, label: 'Listening for your tremor…' },
-  { pct: 22, dur: 20000, label: 'Finding helpful frequencies…' },
-  { pct: 52, dur: 18000, label: 'Matching your tremor frequency…' },
-  { pct: 76, dur: 14000, label: 'Fine-tuning your blend…' },
-  { pct: 93, dur:  6000, label: 'Finalising…' },
-];
+  for (let s=0; s<steps; s++) {
+    if (!active) return curGain;
+    // Track the best tremor level we've achieved
+    if (tRms < bestRms) bestRms = tRms;
 
-let phaseIdx     = 0;
-let monitorInt   = null;
+    // If tremor rising back toward baseline — stop reducing
+    if (tRms > bestRms * (1 + HARMFUL_DELTA)) {
+      curGain = Math.min(curGain + stepSz * 2, startGain); // step back up
+      ramp(N[chKey].g, curGain, 1.0);
+      break;
+    }
 
-function runPhase(i) {
-  if (!active) return;
-  phaseIdx = i;
-  if (i >= PHASES.length) { complete(); return; }
+    curGain = Math.max(MIN_GAIN, curGain - stepSz);
+    ramp(N[chKey].g, curGain, 0.5);
+    await sleep(600);
+  }
+  return curGain;
+}
 
-  const ph = PHASES[i];
-  setBar(ph.pct, ph.label);
+// ── Test one channel ──────────────────────────────────────────────
+// Returns: 'helpful' | 'skipped' | 'harmful'
+// Quiet start → ramp to test level → measure → find minimum if helpful
+async function testChannel(chKey) {
+  const ch = N[chKey];
+  if (!ch) return 'skipped';
 
-  if (i === 0) {
-    // Phase 0: collect baseline tremor with no audio
-    let samples = [];
-    const poll = setInterval(() => { if (tRms > 0) samples.push(tRms); }, 600);
-    phaseTO = setTimeout(() => {
-      clearInterval(poll);
-      baseline = samples.length ? samples.reduce((a,b)=>a+b,0)/samples.length : 0.5;
-      runPhase(1);
-    }, ph.dur);
+  // 1. Start quiet — let user hear it begin without a jolt
+  ramp(ch.g, 0.08, 2.5);
+  setLabel(labelFor(chKey) + ' — starting quietly…');
+  const ok1 = await sleep(10000); if (!ok1 || !active) return 'skipped';
 
-  } else if (i === 1) {
-    // Phase 1: introduce vibrotactile (100 Hz) and gamma (40 Hz) gently
-    makeVibrotactile(100);
-    makeGamma(40);
-    ramp(master, 0.35, 3);
-    // Gentle fade-in — sounds begin quiet, not sudden
-    phaseTO = setTimeout(() => {
-      ramp(N.v.g, 0.35, 4);
-      ramp(N.g.g, 0.24, 4);
-      phaseTO = setTimeout(() => runPhase(2), ph.dur - 4000);
-    }, 500);
+  // 2. Ramp up to test level
+  ramp(ch.g, TEST_GAIN, 7);
+  setLabel(labelFor(chKey) + ' — ramping up…');
+  const ok2 = await sleep(9000); if (!ok2 || !active) return 'skipped';
 
-  } else if (i === 2) {
-    // Phase 2: tune binaural beat exactly to detected tremor frequency
-    const beat = Math.max(3, Math.min(12, tHz));
-    makeBinaural(beat);
-    phaseTO = setTimeout(() => {
-      ramp(N.b.g, 0.20, 3.5);
-      phaseTO = setTimeout(() => runPhase(3), ph.dur - 3500);
-    }, 500);
+  // 3. Measure for 18 seconds
+  setLabel(labelFor(chKey) + ' — measuring effect…');
+  const testRms = await sampleRms(18000);
+  if (!active) return 'skipped';
 
-  } else if (i === 3) {
-    // Phase 3: add pink noise scaled to tremor intensity; monitor for adverse response
-    makeNoise();
-    const noiseTarget = Math.min(0.055, Math.max(0.018, tRms * 0.055));
-    phaseTO = setTimeout(() => {
-      ramp(N.n.g, noiseTarget, 5); // very gentle fade-in
-    }, 500);
+  if (testRms > baseline * (1 + HARMFUL_DELTA)) {
+    // This channel is making things worse — mute it
+    setLabel(labelFor(chKey) + ' — not helpful for you, moving on');
+    ramp(ch.g, 0, 2);
+    await sleep(2500); if (!active) return 'harmful';
+    return 'harmful';
+  }
 
-    // Safety check: if vibrotactile seems to be increasing tremor, mute it
-    monitorInt = setInterval(() => {
-      if (tRms > baseline * 1.18 && N.v) {
-        ramp(N.v.g, 0, 2); // fade out — this channel isn't helping this person
+  if (testRms >= baseline * (1 - HELPFUL_DELTA)) {
+    // No meaningful improvement — skip
+    setLabel(labelFor(chKey) + ' — no clear effect, moving on');
+    ramp(ch.g, 0, 2);
+    await sleep(2500); if (!active) return 'skipped';
+    return 'skipped';
+  }
+
+  // 4. Helpful — find minimum effective volume
+  setLabel(labelFor(chKey) + ' — helpful! Finding minimum effective volume…');
+  bestGain[chKey] = await findMinGain(chKey, TEST_GAIN, 16000);
+  return 'helpful';
+}
+
+function labelFor(k) {
+  return { v:'100 Hz vibrotactile', g:'40 Hz gamma', b:'Binaural beat', n:'Stochastic noise' }[k];
+}
+
+// ── Main session runner (async) ───────────────────────────────────
+async function runSession() {
+
+  // ── Phase 0: Baseline ─────────────────────────────────────────
+  setPhase('baseline','active');
+  animBar(0, 14, 45000);
+  setLabel('Hold your phone in your tremoring hand…');
+
+  // Wait up to 90 seconds for a confirmed tremor reading.
+  // If no tremor is detected, we continue with conservative defaults —
+  // some tremors are very subtle and the motion sensor may not pick them up.
+  let tremorFound = false;
+  let consecutive = 0;
+  const baseArr   = [];
+
+  await new Promise(resolve => {
+    const maxTO  = setTimeout(resolve, 90000);
+    const pollId = setInterval(() => {
+      if (!active) { clearInterval(pollId); clearTimeout(maxTO); resolve(); return; }
+      if (tRms >= TREMOR_THRESHOLD) {
+        consecutive++;
+        baseArr.push(tRms);
+        if (consecutive >= 10) { // ~6 seconds of sustained tremor
+          tremorFound = true;
+          clearInterval(pollId); clearTimeout(maxTO); resolve();
+        }
+      } else {
+        consecutive = 0;
       }
-    }, 3000);
+    }, 600);
+  });
 
-    phaseTO = setTimeout(() => {
-      clearInterval(monitorInt);
-      runPhase(4);
-    }, ph.dur);
+  if (!active) return;
 
-  } else if (i === 4) {
-    // Phase 4: final volume balance and ramp to comfortable level
-    ramp(master, 0.68, 4);
-    phaseTO = setTimeout(() => runPhase(5), ph.dur);
+  if (tremorFound) {
+    baseline = baseArr.reduce((a,b)=>a+b,0)/baseArr.length;
+    setPhase('baseline','done');
+    setLabel('Tremor detected — beginning frequency tests');
+  } else {
+    baseline = Math.max(tRms, 0.5);
+    setPhase('baseline','skipped');
+    setLabel('No tremor detected — applying evidence-based defaults');
+    await sleep(3000); if (!active) return;
   }
+
+  setPct(14);
+
+  // Start master gain low — nothing should be audible yet
+  ramp(master, 0.28, 3);
+
+  // ── Phase 1: Vibrotactile 100 Hz ──────────────────────────────
+  setPhase('vibro','active');
+  animBar(14, 33, 55000);
+  makeVibro(100);
+  const vibroResult = await testChannel('v');
+  helpful.v  = vibroResult === 'helpful';
+  setPhase('vibro', helpful.v ? 'done' : 'skipped');
+  setPct(33);
+  if (!active) return;
+
+  // ── Phase 2: Gamma 40 Hz ──────────────────────────────────────
+  setPhase('gamma','active');
+  animBar(33, 54, 55000);
+  makeGamma(40);
+  const gammaResult = await testChannel('g');
+  helpful.g  = gammaResult === 'helpful';
+  setPhase('gamma', helpful.g ? 'done' : 'skipped');
+  setPct(54);
+  if (!active) return;
+
+  // ── Phase 3: Binaural beat (tuned to detected tremor Hz) ──────
+  setPhase('binaural','active');
+  animBar(54, 72, 45000);
+  const beat = Math.max(3, Math.min(12, tHz));
+  makeBinaural(beat);
+  setLabel(`Binaural beat set to your tremor frequency (${tHz.toFixed(1)} Hz)…`);
+  const binResult = await testChannel('b');
+  helpful.b   = binResult === 'helpful';
+  setPhase('binaural', helpful.b ? 'done' : 'skipped');
+  setPct(72);
+  if (!active) return;
+
+  // ── Phase 4: Stochastic pink noise ────────────────────────────
+  setPhase('noise','active');
+  animBar(72, 86, 30000);
+  makeNoise();
+  // Noise is always sub-perceptual (max gain 0.05) — scaled to detected tremor
+  const noiseGain = Math.min(0.05, Math.max(0.015, tRms * 0.048));
+  bestGain.n = noiseGain;
+
+  setLabel('Adding stochastic resonance noise (sub-threshold)…');
+  ramp(N.n.g, noiseGain, 5); // very slow fade-in — barely perceptible
+  const ok = await sleep(22000); if (!ok || !active) return;
+
+  const noiseRms = await sampleRms(6000);
+  if (noiseRms > baseline * (1 + HARMFUL_DELTA)) {
+    ramp(N.n.g, 0, 2);
+    helpful.n = false;
+    setPhase('noise','skipped');
+  } else {
+    helpful.n = true;
+    setPhase('noise','done');
+  }
+  setPct(86);
+  if (!active) return;
+
+  // ── Phase 5: Finalise ─────────────────────────────────────────
+  setPhase('final','active');
+  animBar(86, 100, 18000);
+  setLabel('Finalising your personal blend…');
+
+  // If nothing proved helpful (no motion sensor, very mild tremor),
+  // fall back to the two most evidence-based channels at gentle volumes.
+  const anyHelpful = Object.values(helpful).some(Boolean);
+  if (!anyHelpful) {
+    if (!N.v) makeVibro(100);
+    if (!N.g) makeGamma(40);
+    ramp(N.v.g, 0.22, 4);
+    ramp(N.g.g, 0.18, 4);
+    helpful.v = true; helpful.g = true;
+  }
+
+  // Final comfortable master volume
+  ramp(master, 0.65, 5);
+  const ok2 = await sleep(16000); if (!ok2 || !active) return;
+
+  setPhase('final','done');
+  setPct(100);
+  complete();
 }
 
+// ── Session complete ──────────────────────────────────────────────
 function complete() {
-  setBar(100, 'Your personal audio is ready');
+  clearInterval(barIntv);
 
   const activeChs = [];
-  if (N.v && N.v.g.gain.value > 0.05) activeChs.push('Vibrotactile 100 Hz');
-  if (N.g)                             activeChs.push('Gamma 40 Hz');
-  if (N.b)                             activeChs.push('Binaural ' + tHz.toFixed(1) + ' Hz');
-  if (N.n)                             activeChs.push('Stochastic noise');
+  if (helpful.v) activeChs.push('Vibrotactile 100 Hz');
+  if (helpful.g) activeChs.push('Gamma 40 Hz');
+  if (helpful.b) activeChs.push('Binaural ' + tHz.toFixed(1) + ' Hz');
+  if (helpful.n) activeChs.push('Stochastic noise');
 
-  document.getElementById('complete').style.display = 'block';
+  const el = document.getElementById('complete');
+  el.style.display = 'block';
   document.getElementById('completeNote').textContent =
-    activeChs.length + ' personalised frequenc' + (activeChs.length===1?'y':'ies') + ' looping continuously.';
+    activeChs.length + ' personalised frequenc' + (activeChs.length===1?'y':'ies')
+    + ' looping continuously. Adjust headphone volume as needed.';
 
   const pillsEl = document.getElementById('pills');
   pillsEl.innerHTML = '';
   activeChs.forEach(ch => {
     const p = document.createElement('span');
-    p.className = 'pill';
-    p.textContent = ch;
+    p.className = 'pill'; p.textContent = ch;
     pillsEl.appendChild(p);
   });
 
-  // Register MediaSession so audio survives screen lock on Android
+  // Show lock toggle
+  document.getElementById('lockTip').style.display = 'flex';
   registerMedia();
 }
 
-// ── Session begin / end ───────────────────────────────────────────
-function begin() {
+// ── Begin / End ───────────────────────────────────────────────────
+async function begin() {
   initCtx();
   if (ctx.state === 'suspended') ctx.resume();
   active = true;
 
-  document.getElementById('beginBtn').style.display = 'none';
-  document.getElementById('prog').style.display     = 'block';
-  document.getElementById('stopBtn').style.display  = 'block';
-  document.getElementById('tips').style.display     = 'block';
+  // Reset
+  ['v','g','b','n'].forEach(k => { helpful[k]=false; bestGain[k]=TEST_GAIN; });
+  PHASES.forEach(p => { pSt[p.id]='pending'; });
+  motBuf=[]; tHz=6; tRms=0; baseline=0.5;
 
+  document.getElementById('beginBtn').style.display  = 'none';
+  document.getElementById('prog').style.display      = 'block';
+  document.getElementById('stopBtn').style.display   = 'block';
+  document.getElementById('tips').style.display      = 'block';
+  document.getElementById('complete').style.display  = 'none';
+  document.getElementById('lockTip').style.display   = 'none';
+
+  buildPhaseList();
   startMotion();
-  runPhase(0);
+  await runSession();
 }
 
 function end() {
   active = false;
-  clearTimeout(phaseTO);
-  clearInterval(monitorInt);
+  cancelSleep();
+  clearInterval(barIntv);
   tearAll();
-
-  if (ctx) { ctx.close(); ctx = null; master = null; }
+  if (ctx) { ctx.close(); ctx=null; master=null; }
   window.removeEventListener('devicemotion', onMotion);
-  motBuf = []; tHz = 6; tRms = 0;
+  motBuf=[]; tHz=6; tRms=0;
 
-  document.getElementById('beginBtn').style.display = 'block';
-  document.getElementById('prog').style.display     = 'none';
-  document.getElementById('stopBtn').style.display  = 'none';
-  document.getElementById('tips').style.display     = 'none';
-  document.getElementById('complete').style.display = 'none';
-  document.getElementById('barFill').style.width    = '0%';
-  document.getElementById('barPct').textContent     = '0%';
+  document.getElementById('beginBtn').style.display  = 'block';
+  document.getElementById('prog').style.display      = 'none';
+  document.getElementById('stopBtn').style.display   = 'none';
+  document.getElementById('tips').style.display      = 'none';
+  document.getElementById('complete').style.display  = 'none';
+  document.getElementById('lockTip').style.display   = 'none';
+  document.getElementById('barFill').style.width     = '0%';
+  document.getElementById('barPct').textContent      = '0%';
   document.getElementById('lockTog').classList.remove('on');
   locked = false;
 }
 
-// ── Lock mode ─────────────────────────────────────────────────────
-// MediaSession registers audio with the OS — continues playing when
-// the screen locks on most Android browsers.
-// iOS Safari aggressively suspends web audio on lock; use a local
-// MP3 export on iPhone (see README for the Shokz OpenSwim workflow).
+// ── UI helpers ────────────────────────────────────────────────────
+function setLabel(t) { document.getElementById('phaseText').textContent = t; }
+
+function setPct(pct) {
+  pct = Math.round(pct);
+  document.getElementById('barFill').style.width = pct + '%';
+  document.getElementById('barPct').textContent  = pct + '%';
+}
+
+function setPhase(id, status) {
+  pSt[id] = status;
+  updatePhaseList();
+}
+
+function buildPhaseList() {
+  const el = document.getElementById('phaseList');
+  el.innerHTML = '';
+  PHASES.forEach(p => {
+    const row = document.createElement('div');
+    row.className = 'pr';
+    row.id = 'pr-' + p.id;
+    row.innerHTML =
+      '<span class="pd pd-pending" id="pd-' + p.id + '">○</span>' +
+      '<span class="pl" id="pl-' + p.id + '">' + p.label + '</span>';
+    el.appendChild(row);
+  });
+}
+
+const DOT_SYMBOLS = { pending:'○', active:'◉', done:'✓', skipped:'—' };
+
+function updatePhaseList() {
+  PHASES.forEach(p => {
+    const dot = document.getElementById('pd-' + p.id);
+    const row = document.getElementById('pr-' + p.id);
+    if (!dot || !row) return;
+    const st = pSt[p.id];
+    dot.textContent = DOT_SYMBOLS[st] || '○';
+    dot.className   = 'pd pd-' + st;
+    row.className   = 'pr' + (st === 'active' ? ' pr-active' : '');
+  });
+}
+
+// ── Lock mode / MediaSession ──────────────────────────────────────
 function toggleLock() {
   locked = !locked;
   document.getElementById('lockTog').classList.toggle('on', locked);
@@ -650,14 +987,6 @@ function registerMedia() {
   navigator.mediaSession.setActionHandler('play',  () => ctx?.resume?.());
   navigator.mediaSession.setActionHandler('pause', () => {});
 }
-
-// ── Progress bar helper ───────────────────────────────────────────
-function setBar(pct, label) {
-  document.getElementById('barFill').style.width   = pct + '%';
-  document.getElementById('barPct').textContent    = pct + '%';
-  document.getElementById('phaseText').textContent = label;
-}
 </script>
-
 </body>
 </html>
