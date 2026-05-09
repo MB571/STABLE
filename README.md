@@ -29,7 +29,10 @@ That's it. No settings, no sliders, no manual adjustment needed.
 Tap the **Keep playing when screen locks** toggle in the app. The audio is registered with your phone's media system (MediaSession API) and will continue playing after the screen locks on most Android browsers (Chrome recommended).
 
 ### iPhone
-iOS suspends web audio when the screen locks, even with the toggle on. The recommended solution for iPhone users is the **Shokz OpenSwim**: it has a built-in MP3 player with 32 GB of storage. Use a screen recording app to capture your tuned STABLE session as an audio file, transfer it to the OpenSwim, and play it from the device directly. No phone needed.
+iOS suspends web audio when the screen locks, even with the toggle on. Once your session has finished tuning, tap **Save audio file** in the app to download your personalised WAV file. You then have two options:
+
+- **VLC** (free, App Store): open the WAV file in VLC, tap the repeat icon, then lock your screen. VLC continues playing through your bone conduction headphones with the screen off.
+- **Shokz OpenSwim**: transfer the WAV file to the OpenSwim's built-in storage via USB. The OpenSwim plays it on loop directly from the device — no phone needed at all.
 
 ---
 
