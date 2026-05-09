@@ -1,4 +1,5 @@
 # STABLE
+**Signals Tuned for Assistive Bone-Level Equilibration**
 **Free, open-source bone conduction therapy for tremor relief.**
 
 **[Open the app on your phone](https://mb571.github.io/STABLE/)**
