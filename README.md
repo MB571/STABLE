@@ -13,7 +13,7 @@ STABLE plays scientifically-grounded audio through bone conduction headphones to
 ## How to use
 
 1. Put on your bone conduction headphones and set them to **maximum volume**
-2. Open STABLE in your phone's browser (or install as a home screen app)
+2. Open STABLE in your phone's browser
 3. Hold your phone in the hand that tremors
 4. Tap **Begin Session** and grant motion sensor access when asked
 5. Wait ~2 minutes while STABLE listens and adapts; the bar fills as it tunes
