@@ -73,7 +73,7 @@ All sounds are sine waves or spectrally smooth noise (nothing harsh). Every chan
 The primary therapeutic channel. Mechanical vibration at 80-120 Hz activates Ia muscle spindle afferents, which compete with tremor oscillations via spinal reflex pathways. Bone conduction delivers this to the temporal and mastoid bones, engaging vestibular pathways. If this channel appears to worsen your tremor, STABLE mutes it automatically.
 
 **2. Gamma Entrainment (40 Hz)**
-A 200 Hz carrier tone that pulses at 40 Hz, the gamma frequency associated with motor cortex activity. 40 Hz sensory entrainment has been shown to produce measurable neurological changes, including effects on neural synchrony (Iaccarino et al., *Nature*, 2016 — original work is in an Alzheimer's mouse model). Also functions as rhythmic auditory stimulation (RAS), which has direct evidence for improving movement in Parkinson's (Thaut et al., 1996).
+A 200 Hz carrier tone that pulses at 40 Hz, the gamma frequency associated with motor cortex activity. Gamma oscillations in the basal ganglia-thalamo-cortical circuit are pathologically reduced in Parkinson's disease; restoring them via 40 Hz entrainment has been shown to recover primary motor cortex plasticity in PD patients (Guerra et al., *Journal of Neuroscience*, 2020). Also functions as rhythmic auditory stimulation (RAS), which has direct evidence for improving movement in Parkinson's (Thaut et al., 1996).
 
 **3. Binaural Beat (matched to your tremor)**
 Your left ear hears 200 Hz; your right ear hears 200 + [your tremor frequency] Hz. The brain processes the small difference as a perceived "beat" at exactly your tremor frequency. This may engage auditory-motor coupling to compete with the pathological oscillator. Requires headphones with separated left/right channels; all bone conduction headphones listed above provide this.
@@ -85,10 +85,26 @@ Sub-threshold broadband noise, barely perceptible. Adding small amounts of noise
 
 ## Scientific references
 
-- Iaccarino HF et al. (2016). Gamma frequency entrainment attenuates amyloid load and modifies microglia. *Nature*, 540, 230-235. (Demonstrates 40 Hz sensory entrainment produces measurable neurological change; original work is in an Alzheimer's mouse model, not Parkinson's.)
-- Thaut MH et al. (1996). Rhythmic auditory stimulation in gait training for Parkinson's disease patients. *Movement Disorders*, 11(2), 193-200.
-- Collins JJ, Priplata AA et al. (2003). Noise-enhanced human sensorimotor function. *IEEE Eng Med Biol Mag*, 22(2), 76-83.
-- Kaut O et al. (2011). Stochastic resonance therapy in Parkinson's disease. *NeuroRehabilitation*, 28(4), 353-358.
+**Vibrotactile stimulation and tremor**
+- Jobges EM et al. (2002). Vibratory proprioceptive stimulation affects Parkinsonian tremor. *Parkinsonism and Related Disorders*, 8(3), 171-176. [doi:10.1016/s1353-8020(01)00016-5](https://doi.org/10.1016/s1353-8020(01)00016-5)
+- Tabacof L et al. (2021). Safety and Tolerability of a Wearable, Vibrotactile Stimulation Device for Parkinson's Disease. *Frontiers in Human Neuroscience*, 15, 712621. [doi:10.3389/fnhum.2021.712621](https://doi.org/10.3389/fnhum.2021.712621)
+- Cabral AM et al. (2024). On the Effect of Vibrotactile Stimulation in Essential Tremor. *Healthcare*, 12(4), 448. [doi:10.3390/healthcare12040448](https://doi.org/10.3390/healthcare12040448)
+
+**Gamma entrainment (40 Hz)**
+- Guerra A et al. (2020). Enhancing Gamma Oscillations Restores Primary Motor Cortex Plasticity in Parkinson's Disease. *Journal of Neuroscience*, 40(24), 4788-4796. [doi:10.1523/JNEUROSCI.0357-20.2020](https://doi.org/10.1523/JNEUROSCI.0357-20.2020)
+- Iaccarino HF et al. (2016). Gamma frequency entrainment attenuates amyloid load and modifies microglia. *Nature*, 540, 230-235. (40 Hz sensory entrainment produces measurable neurological change; original work is in an Alzheimer's mouse model.) [doi:10.1038/nature20587](https://doi.org/10.1038/nature20587)
+
+**Rhythmic auditory stimulation**
+- Thaut MH et al. (1996). Rhythmic auditory stimulation in gait training for Parkinson's disease patients. *Movement Disorders*, 11(2), 193-200. [doi:10.1002/mds.870110213](https://doi.org/10.1002/mds.870110213)
+
+**Binaural beats**
+- Calvano A et al. (2023). Binaural acoustic stimulation in patients with Parkinson's disease. *Frontiers in Neurology*, 14, 1167006. [doi:10.3389/fneur.2023.1167006](https://doi.org/10.3389/fneur.2023.1167006)
+- Jirakittayakorn N & Wongsawat Y (2017). Brain Responses to a 6-Hz Binaural Beat: Effects on General Theta Rhythm and Frontal Midline Theta Activity. *Frontiers in Neuroscience*, 11, 365. [doi:10.3389/fnins.2017.00365](https://doi.org/10.3389/fnins.2017.00365)
+
+**Stochastic resonance**
+- Collins JJ, Priplata AA et al. (2003). Noise-enhanced human sensorimotor function. *IEEE Eng Med Biol Mag*, 22(2), 76-83. [doi:10.1109/MEMB.2003.1195700](https://doi.org/10.1109/MEMB.2003.1195700)
+- Kaut O et al. (2011). Stochastic resonance therapy in Parkinson's disease. *NeuroRehabilitation*, 28(4), 353-358. [doi:10.3233/NRE-2011-0663](https://doi.org/10.3233/NRE-2011-0663)
+- Kaut O et al. (2016). Postural Stability in Parkinson's Disease Patients Is Improved after Stochastic Resonance Therapy. *Parkinson's Disease*, 2016, 7948721. [doi:10.1155/2016/7948721](https://doi.org/10.1155/2016/7948721)
 
 ---
 
