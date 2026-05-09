@@ -811,12 +811,16 @@ async function runSession() {
       if (tRms >= TREMOR_THRESHOLD) {
         consecutive++;
         baseArr.push(tRms);
+        setLabel(`Tremor detected — confirming… (${consecutive}/10)`);
         if (consecutive >= 10) { // ~6 seconds of sustained tremor
           tremorFound = true;
           clearInterval(pollId); clearTimeout(maxTO); resolve();
         }
       } else {
         consecutive = 0;
+        setLabel(tRms > 0
+          ? 'Listening… no tremor detected yet'
+          : 'Hold your phone in your tremoring hand…');
       }
     }, 600);
   });
