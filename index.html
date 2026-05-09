@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="description" content="STABLE — Free bone conduction therapy for tremor relief. Adapts to you automatically.">
+  <title>STABLE</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #ffffff;
+      --surface:      #f8fafc;
+      --border:       #e2e8f0;
+      --text:         #0f172a;
+      --text-dim:     #475569;
+      --text-muted:   #94a3b8;
+      --accent:       #0891b2;
+      --accent-dark:  #0e7490;
+      --accent-light: #e0f9ff;
+      --success:      #059669;
+    }
+
+    html { background: var(--bg); }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px 80px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
+    }
+
+    /* ── Logo ── */
+    .logo { margin-bottom: 56px; }
+
+    .icon {
+      width: 72px;
+      height: 72px;
+      background: linear-gradient(145deg, #0891b2, #06b6d4);
+      border-radius: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 34px;
+      margin-bottom: 18px;
+      box-shadow: 0 6px 24px rgba(8,145,178,0.22);
+    }
+
+    h1 {
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .sub {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* ── Begin button ── */
+    #beginBtn {
+      width: 100%;
+      padding: 22px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 16px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(8,145,178,0.30);
+      transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    #beginBtn:hover  { background: var(--accent-dark); box-shadow: 0 6px 26px rgba(8,145,178,0.38); }
+    #beginBtn:active { transform: scale(0.98); }
+
+    /* ── Progress ── */
+    #prog {
+      display: none;
+      margin-bottom: 28px;
+    }
+
+    .phase-text {
+      font-size: 15px;
+      color: var(--text-dim);
+      margin-bottom: 18px;
+      min-height: 22px;
+      font-weight: 500;
+    }
+
+    .bar-track {
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: linear-gradient(to right, var(--accent), #06b6d4);
+      border-radius: 3px;
+      width: 0%;
+      transition: width 0.7s ease;
+    }
+
+    .bar-pct {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-align: right;
+    }
+
+    /* ── Complete ── */
+    #complete {
+      display: none;
+      margin-bottom: 24px;
+    }
+
+    .check {
+      font-size: 44px;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .complete-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 5px;
+    }
+
+    .complete-note {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.65;
+      margin-bottom: 14px;
+    }
+
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      justify-content: center;
+    }
+
+    .pill {
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 20px;
+      background: var(--accent-light);
+      color: var(--accent);
+      border: 1px solid rgba(8,145,178,0.18);
+    }
+
+    /* ── Stop button ── */
+    #stopBtn {
+      display: none;
+      width: 100%;
+      padding: 16px;
+      margin-top: 10px;
+      background: transparent;
+      color: var(--text-muted);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    #stopBtn:hover { background: #fef2f2; border-color: #fca5a5; color: #dc2626; }
+
+    /* ── Tips ── */
+    #tips {
+      display: none;
+      margin-top: 22px;
+    }
+
+    .tip {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: 14px 16px;
+      text-align: left;
+      margin-bottom: 10px;
+    }
+
+    .tip:last-child { margin-bottom: 0; }
+
+    .tip-icon { font-size: 19px; flex-shrink: 0; margin-top: 1px; }
+
+    .tip-body {
+      font-size: 12.5px;
+      color: var(--text-dim);
+      line-height: 1.65;
+    }
+
+    .tip-body strong { color: var(--text); display: block; margin-bottom: 2px; }
+
+    /* ── Lock toggle ── */
+    .lock-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .lock-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-dim);
+    }
+
+    .tog {
+      width: 44px;
+      height: 26px;
+      border-radius: 13px;
+      background: var(--border);
+      position: relative;
+      cursor: pointer;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+
+    .tog::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: #fff;
+      border-radius: 50%;
+      top: 3px;
+      left: 3px;
+      transition: transform 0.18s;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.18);
+    }
+
+    .tog.on { background: var(--accent); }
+    .tog.on::after { transform: translateX(18px); }
+
+    /* ── Footer ── */
+    footer {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 11px 20px;
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    footer a { color: var(--accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+
+  <!-- Logo -->
+  <div class="logo">
+    <div class="icon">🦴</div>
+    <h1>STABLE</h1>
+    <p class="sub">Free bone conduction tremor relief.<br>Adapts to you automatically.</p>
+  </div>
+
+  <!-- Stage 1: idle -->
+  <button id="beginBtn" onclick="begin()">Begin Session</button>
+
+  <!-- Stage 2: tuning in progress -->
+  <div id="prog">
+    <div class="phase-text" id="phaseText">Starting…</div>
+    <div class="bar-track"><div class="bar-fill" id="barFill"></div></div>
+    <div class="bar-pct"   id="barPct">0%</div>
+  </div>
+
+  <!-- Stage 3: complete -->
+  <div id="complete">
+    <span class="check">✓</span>
+    <div class="complete-title">Your frequencies are ready</div>
+    <div class="complete-note" id="completeNote">Audio is looping continuously.</div>
+    <div class="pills" id="pills"></div>
+  </div>
+
+  <!-- Stop (shown during session) -->
+  <button id="stopBtn" onclick="end()">End Session</button>
+
+  <!-- Tips (shown once started) -->
+  <div id="tips">
+    <div class="tip">
+      <span class="tip-icon">🎧</span>
+      <div class="tip-body">
+        <strong>Set headphone volume to maximum</strong>
+        The app plays at a safe level. Maximum headphone volume ensures the mechanical vibration through bone is strong enough to be therapeutic.
+      </div>
+    </div>
+    <div class="tip" id="lockTip">
+      <span class="tip-icon">🔒</span>
+      <div class="tip-body lock-row">
+        <div>
+          <strong>Keep playing when screen locks</strong>
+          Audio continues in the background via MediaSession.
+        </div>
+        <div class="tog" id="lockTog" onclick="toggleLock()" style="margin-left:14px"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <a href="https://github.com/MB571/STABLE" target="_blank">GitHub</a>
+  &nbsp;·&nbsp; Free &amp; open source &nbsp;·&nbsp; No data collected &nbsp;·&nbsp; Not a medical device
+</footer>
+
+<script>
+// ================================================================
+// STABLE — Adaptive Bone Conduction Tremor Therapy
+// ================================================================
+// Four scientific audio channels, all faded in gently from silence.
+// The gyroscope tunes the binaural beat to your exact tremor frequency.
+// Channels that appear to worsen tremor are automatically muted.
+// ================================================================
+
+// ── Global state ─────────────────────────────────────────────────
+let ctx    = null;   // AudioContext
+let master = null;   // master GainNode
+let active = false;
+let locked = false;
+let phaseTO = null;
+
+// Motion
+const BUF_N    = 128;
+const SAMP_HZ  = 60;
+let   motBuf   = [];
+let   tHz      = 6;     // detected tremor frequency
+let   tRms     = 0;     // detected tremor amplitude
+let   baseline = 0.5;   // RMS before audio starts
+
+// Channel gain nodes (accessed by key: 'v' 'g' 'b' 'n')
+const N = {};
+
+// ── Audio helpers ─────────────────────────────────────────────────
+function initCtx() {
+  if (ctx) return;
+  ctx    = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 44100 });
+  master = ctx.createGain();
+  master.gain.value = 0;
+  master.connect(ctx.destination);
+}
+
+// Smooth ramp — avoids clicks; dur is time constant in seconds
+function ramp(gainNode, target, dur = 2.5) {
+  gainNode.gain.setTargetAtTime(target, ctx.currentTime, dur / 3);
+}
+
+// ── Channel builders ─────────────────────────────────────────────
+// All start with gain = 0; caller is responsible for ramping up.
+
+function makeVibrotactile(hz = 100) {
+  tearCh('v');
+  const g = ctx.createGain(); g.gain.value = 0; g.connect(master);
+  const o = ctx.createOscillator(); o.type = 'sine'; o.frequency.value = hz;
+  o.connect(g); o.start();
+  N.v = { g, o };
+}
+
+function makeGamma(hz = 40) {
+  tearCh('g');
+  const g   = ctx.createGain(); g.gain.value = 0; g.connect(master);
+  const car = ctx.createOscillator(); car.type = 'sine'; car.frequency.value = 200;
+  car.connect(g); car.start();
+  // Amplitude modulate the 200 Hz carrier at gamma frequency → rhythmic pulse
+  const mod = ctx.createOscillator(); mod.frequency.value = hz;
+  const mg  = ctx.createGain(); mg.gain.value = 0.5;
+  mod.connect(mg); mg.connect(g.gain); mod.start();
+  N.g = { g, car, mod };
+}
+
+function makeBinaural(beat = 6) {
+  tearCh('b');
+  const g   = ctx.createGain(); g.gain.value = 0; g.connect(master);
+  const mrg = ctx.createChannelMerger(2); mrg.connect(g);
+  const lO  = ctx.createOscillator(); lO.type = 'sine'; lO.frequency.value = 200;
+  const lG  = ctx.createGain(); lG.gain.value = 1;
+  lO.connect(lG); lG.connect(mrg, 0, 0); lO.start();
+  const rO  = ctx.createOscillator(); rO.type = 'sine'; rO.frequency.value = 200 + beat;
+  const rG  = ctx.createGain(); rG.gain.value = 1;
+  rO.connect(rG); rG.connect(mrg, 0, 1); rO.start();
+  N.b = { g, mrg, lO, rO };
+}
+
+function makeNoise() {
+  tearCh('n');
+  // Paul Kellet's pink noise approximation — spectrally matches natural sensory noise
+  const rate = ctx.sampleRate;
+  const len  = rate * 4; // 4-second loop
+  const buf  = ctx.createBuffer(1, len, rate);
+  const d    = buf.getChannelData(0);
+  let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
+  for (let i=0; i<len; i++) {
+    const w = Math.random()*2-1;
+    b0=0.99886*b0+w*0.0555179; b1=0.99332*b1+w*0.0750759;
+    b2=0.96900*b2+w*0.1538520; b3=0.86650*b3+w*0.3104856;
+    b4=0.55000*b4+w*0.5329522; b5=-0.7616*b5-w*0.0168980;
+    d[i] = (b0+b1+b2+b3+b4+b5+b6+w*0.5362)*0.11;
+    b6 = w*0.115926;
+  }
+  const g   = ctx.createGain(); g.gain.value = 0; g.connect(master);
+  const src = ctx.createBufferSource(); src.buffer = buf; src.loop = true;
+  src.connect(g); src.start();
+  N.n = { g, src };
+}
+
+function tearCh(k) {
+  const n = N[k]; if (!n) return;
+  ['o','car','mod','lO','rO','src','mrg'].forEach(p => {
+    try { n[p]?.stop?.(); n[p]?.disconnect?.(); } catch(_){}
+  });
+  try { n.g.disconnect(); } catch(_){}
+  delete N[k];
+}
+
+function tearAll() { ['v','g','b','n'].forEach(tearCh); }
+
+// ── Motion / Tremor Detection ─────────────────────────────────────
+function startMotion() {
+  if (typeof DeviceMotionEvent === 'undefined') return;
+  const listen = () => window.addEventListener('devicemotion', onMotion, { passive: true });
+  if (typeof DeviceMotionEvent.requestPermission === 'function') {
+    DeviceMotionEvent.requestPermission().then(s => { if (s==='granted') listen(); }).catch(()=>{});
+  } else {
+    listen();
+  }
+}
+
+function onMotion(e) {
+  const a = e.accelerationIncludingGravity || e.acceleration;
+  if (!a) return;
+  const mag = Math.sqrt((a.x||0)**2+(a.y||0)**2+(a.z||0)**2);
+  motBuf.push(mag);
+  if (motBuf.length > BUF_N) motBuf.shift();
+  if (motBuf.length >= BUF_N) compute();
+}
+
+function compute() {
+  const n    = motBuf.length;
+  const mean = motBuf.reduce((a,b)=>a+b,0)/n;
+  const c    = motBuf.map(v=>v-mean);
+  tRms = Math.sqrt(c.reduce((a,b)=>a+b*b,0)/n);
+
+  // Autocorrelation: find dominant period in 3–12 Hz range (lags 5–20 @ 60 Hz)
+  let lag=10, best=-Infinity;
+  for (let k=5; k<=20; k++) {
+    let s=0;
+    for (let i=0; i<n-k; i++) s += c[i]*c[i+k];
+    s /= (n-k);
+    if (s > best) { best=s; lag=k; }
+  }
+  tHz = tHz*0.85 + (SAMP_HZ/lag)*0.15;
+}
+
+// ── Tuning Pipeline ───────────────────────────────────────────────
+// Five phases, each with a duration and a setup action.
+// After each phase the next fires automatically.
+
+const PHASES = [
+  { pct:  0, dur: 14000, label: 'Listening for your tremor…' },
+  { pct: 22, dur: 20000, label: 'Finding helpful frequencies…' },
+  { pct: 52, dur: 18000, label: 'Matching your tremor frequency…' },
+  { pct: 76, dur: 14000, label: 'Fine-tuning your blend…' },
+  { pct: 93, dur:  6000, label: 'Finalising…' },
+];
+
+let phaseIdx     = 0;
+let monitorInt   = null;
+
+function runPhase(i) {
+  if (!active) return;
+  phaseIdx = i;
+  if (i >= PHASES.length) { complete(); return; }
+
+  const ph = PHASES[i];
+  setBar(ph.pct, ph.label);
+
+  if (i === 0) {
+    // Phase 0: collect baseline tremor with no audio
+    let samples = [];
+    const poll = setInterval(() => { if (tRms > 0) samples.push(tRms); }, 600);
+    phaseTO = setTimeout(() => {
+      clearInterval(poll);
+      baseline = samples.length ? samples.reduce((a,b)=>a+b,0)/samples.length : 0.5;
+      runPhase(1);
+    }, ph.dur);
+
+  } else if (i === 1) {
+    // Phase 1: introduce vibrotactile (100 Hz) and gamma (40 Hz) gently
+    makeVibrotactile(100);
+    makeGamma(40);
+    ramp(master, 0.35, 3);
+    // Gentle fade-in — sounds begin quiet, not sudden
+    phaseTO = setTimeout(() => {
+      ramp(N.v.g, 0.35, 4);
+      ramp(N.g.g, 0.24, 4);
+      phaseTO = setTimeout(() => runPhase(2), ph.dur - 4000);
+    }, 500);
+
+  } else if (i === 2) {
+    // Phase 2: tune binaural beat exactly to detected tremor frequency
+    const beat = Math.max(3, Math.min(12, tHz));
+    makeBinaural(beat);
+    phaseTO = setTimeout(() => {
+      ramp(N.b.g, 0.20, 3.5);
+      phaseTO = setTimeout(() => runPhase(3), ph.dur - 3500);
+    }, 500);
+
+  } else if (i === 3) {
+    // Phase 3: add pink noise scaled to tremor intensity; monitor for adverse response
+    makeNoise();
+    const noiseTarget = Math.min(0.055, Math.max(0.018, tRms * 0.055));
+    phaseTO = setTimeout(() => {
+      ramp(N.n.g, noiseTarget, 5); // very gentle fade-in
+    }, 500);
+
+    // Safety check: if vibrotactile seems to be increasing tremor, mute it
+    monitorInt = setInterval(() => {
+      if (tRms > baseline * 1.18 && N.v) {
+        ramp(N.v.g, 0, 2); // fade out — this channel isn't helping this person
+      }
+    }, 3000);
+
+    phaseTO = setTimeout(() => {
+      clearInterval(monitorInt);
+      runPhase(4);
+    }, ph.dur);
+
+  } else if (i === 4) {
+    // Phase 4: final volume balance and ramp to comfortable level
+    ramp(master, 0.68, 4);
+    phaseTO = setTimeout(() => runPhase(5), ph.dur);
+  }
+}
+
+function complete() {
+  setBar(100, 'Your personal audio is ready');
+
+  const activeChs = [];
+  if (N.v && N.v.g.gain.value > 0.05) activeChs.push('Vibrotactile 100 Hz');
+  if (N.g)                             activeChs.push('Gamma 40 Hz');
+  if (N.b)                             activeChs.push('Binaural ' + tHz.toFixed(1) + ' Hz');
+  if (N.n)                             activeChs.push('Stochastic noise');
+
+  document.getElementById('complete').style.display = 'block';
+  document.getElementById('completeNote').textContent =
+    activeChs.length + ' personalised frequenc' + (activeChs.length===1?'y':'ies') + ' looping continuously.';
+
+  const pillsEl = document.getElementById('pills');
+  pillsEl.innerHTML = '';
+  activeChs.forEach(ch => {
+    const p = document.createElement('span');
+    p.className = 'pill';
+    p.textContent = ch;
+    pillsEl.appendChild(p);
+  });
+
+  // Register MediaSession so audio survives screen lock on Android
+  registerMedia();
+}
+
+// ── Session begin / end ───────────────────────────────────────────
+function begin() {
+  initCtx();
+  if (ctx.state === 'suspended') ctx.resume();
+  active = true;
+
+  document.getElementById('beginBtn').style.display = 'none';
+  document.getElementById('prog').style.display     = 'block';
+  document.getElementById('stopBtn').style.display  = 'block';
+  document.getElementById('tips').style.display     = 'block';
+
+  startMotion();
+  runPhase(0);
+}
+
+function end() {
+  active = false;
+  clearTimeout(phaseTO);
+  clearInterval(monitorInt);
+  tearAll();
+
+  if (ctx) { ctx.close(); ctx = null; master = null; }
+  window.removeEventListener('devicemotion', onMotion);
+  motBuf = []; tHz = 6; tRms = 0;
+
+  document.getElementById('beginBtn').style.display = 'block';
+  document.getElementById('prog').style.display     = 'none';
+  document.getElementById('stopBtn').style.display  = 'none';
+  document.getElementById('tips').style.display     = 'none';
+  document.getElementById('complete').style.display = 'none';
+  document.getElementById('barFill').style.width    = '0%';
+  document.getElementById('barPct').textContent     = '0%';
+  document.getElementById('lockTog').classList.remove('on');
+  locked = false;
+}
+
+// ── Lock mode ─────────────────────────────────────────────────────
+// MediaSession registers audio with the OS — continues playing when
+// the screen locks on most Android browsers.
+// iOS Safari aggressively suspends web audio on lock; use a local
+// MP3 export on iPhone (see README for the Shokz OpenSwim workflow).
+function toggleLock() {
+  locked = !locked;
+  document.getElementById('lockTog').classList.toggle('on', locked);
+  if (locked && ctx?.state === 'suspended') ctx.resume();
+}
+
+function registerMedia() {
+  if (!('mediaSession' in navigator)) return;
+  navigator.mediaSession.metadata = new MediaMetadata({
+    title:  'STABLE Therapy',
+    artist: 'Bone Conduction Tremor Relief',
+    album:  'STABLE',
+  });
+  navigator.mediaSession.setActionHandler('play',  () => ctx?.resume?.());
+  navigator.mediaSession.setActionHandler('pause', () => {});
+}
+
+// ── Progress bar helper ───────────────────────────────────────────
+function setBar(pct, label) {
+  document.getElementById('barFill').style.width   = pct + '%';
+  document.getElementById('barPct').textContent    = pct + '%';
+  document.getElementById('phaseText').textContent = label;
+}
+</script>
+
+</body>
+</html>
