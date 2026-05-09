@@ -34,7 +34,7 @@ iOS suspends web audio when the screen locks, even with the toggle on. The recom
 
 ## Recommended headphones
 
-Bone conduction headphones deliver auditory stimulation and mechanical skull vibration simultaneously. Any model will work with STABLE; these are tested and ordered by therapeutic value.
+Bone conduction headphones deliver auditory stimulation and mechanical skull vibration simultaneously. Any model will work with STABLE; these are tested and ordered by therapeutic value. I have no affilliations with any brands these were some initial searches that matched my frequencies used.
 
 | Device | Price | Best for |
 |---|---|---|
