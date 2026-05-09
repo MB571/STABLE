@@ -1,5 +1,4 @@
-# STABLE
-**Signals Tuned for Assistive Bone-Level Equilibration**
+# STABLE *Signals Tuned for Assistive Bone-Level Equilibration*
 
 **Free, open-source bone conduction therapy for tremor relief.**
 
