@@ -73,7 +73,7 @@ All sounds are sine waves or spectrally smooth noise (nothing harsh). Every chan
 The primary therapeutic channel. Mechanical vibration at 80-120 Hz activates Ia muscle spindle afferents, which compete with tremor oscillations via spinal reflex pathways. Bone conduction delivers this to the temporal and mastoid bones, engaging vestibular pathways. If this channel appears to worsen your tremor, STABLE mutes it automatically.
 
 **2. Gamma Entrainment (40 Hz)**
-A 200 Hz carrier tone that pulses at 40 Hz, the gamma frequency associated with motor cortex activity. Gamma-band coupling between cortex and cerebellum is disrupted in Parkinson's disease; 40 Hz sensory stimulation may help restore this (Iaccarino et al., *Nature*, 2016). Also functions as rhythmic auditory stimulation (RAS), which has strong evidence for improving movement in Parkinson's.
+A 200 Hz carrier tone that pulses at 40 Hz, the gamma frequency associated with motor cortex activity. 40 Hz sensory entrainment has been shown to produce measurable neurological changes, including effects on neural synchrony (Iaccarino et al., *Nature*, 2016 — original work is in an Alzheimer's mouse model). Also functions as rhythmic auditory stimulation (RAS), which has direct evidence for improving movement in Parkinson's (Thaut et al., 1996).
 
 **3. Binaural Beat (matched to your tremor)**
 Your left ear hears 200 Hz; your right ear hears 200 + [your tremor frequency] Hz. The brain processes the small difference as a perceived "beat" at exactly your tremor frequency. This may engage auditory-motor coupling to compete with the pathological oscillator. Requires headphones with separated left/right channels; all bone conduction headphones listed above provide this.
@@ -85,11 +85,10 @@ Sub-threshold broadband noise, barely perceptible. Adding small amounts of noise
 
 ## Scientific references
 
-- Jobst EE et al. (2017). Vibration therapy for tremor. *J Neurol Sci.*
-- Iaccarino HF et al. (2016). Gamma frequency entrainment attenuates amyloid load and modifies microglia. *Nature*, 540, 230-235.
-- Thaut MH et al. (1996). Rhythmic auditory stimulation in gait training. *J Neurol Sci.*
-- Collins JJ, Priplata AA et al. (2003). Noise-enhanced human sensorimotor function. *IEEE Eng Med Biol Mag.*
-- Kaut O et al. (2014). Stochastic resonance therapy in Parkinson's disease. *NeuroRehabilitation.*
+- Iaccarino HF et al. (2016). Gamma frequency entrainment attenuates amyloid load and modifies microglia. *Nature*, 540, 230-235. (Demonstrates 40 Hz sensory entrainment produces measurable neurological change; original work is in an Alzheimer's mouse model, not Parkinson's.)
+- Thaut MH et al. (1996). Rhythmic auditory stimulation in gait training for Parkinson's disease patients. *Movement Disorders*, 11(2), 193-200.
+- Collins JJ, Priplata AA et al. (2003). Noise-enhanced human sensorimotor function. *IEEE Eng Med Biol Mag*, 22(2), 76-83.
+- Kaut O et al. (2011). Stochastic resonance therapy in Parkinson's disease. *NeuroRehabilitation*, 28(4), 353-358.
 
 ---
 
