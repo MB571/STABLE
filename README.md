@@ -1,6 +1,8 @@
 # STABLE
 **Free, open-source bone conduction therapy for tremor relief.**
 
+**[Open the app on your phone](https://mb571.github.io/STABLE/)**
+
 STABLE plays scientifically-grounded audio through bone conduction headphones to help reduce hand tremors, including Parkinsonian and essential tremor. It detects your tremor automatically using your phone's motion sensor and adapts the audio to you personally, with no manual settings required.
 
 > **Important:** STABLE is a free wellness tool, not a medical device. It has not been evaluated by any regulatory authority. Consult your neurologist before use.
