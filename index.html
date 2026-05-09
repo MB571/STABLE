@@ -454,6 +454,7 @@
 
   <!-- Stage 1: idle -->
   <button id="beginBtn" onclick="begin()">Begin Session</button>
+  <p id="sessionTime" style="text-align:center;font-size:12px;color:var(--text-muted);margin-top:10px;">A full session takes approximately 5 to 8 minutes.</p>
 
   <!-- Stage 2: tuning -->
   <div id="prog">
@@ -538,12 +539,13 @@ const MIN_GAIN         = 0.08;  // minimum useful gain (below this: sub-perceptu
 // ── Phase definitions ─────────────────────────────────────────────
 // barStart/barEnd: the progress bar range this phase animates across
 const PHASES = [
-  { id:'baseline', label:'Detecting tremor baseline',           barStart:0,  barEnd:14 },
-  { id:'vibro',    label:'Testing vibrotactile 100 Hz',         barStart:14, barEnd:33 },
-  { id:'gamma',    label:'Testing gamma 40 Hz',                 barStart:33, barEnd:54 },
-  { id:'binaural', label:'Matching binaural beat to tremor',    barStart:54, barEnd:72 },
-  { id:'noise',    label:'Testing stochastic resonance noise',  barStart:72, barEnd:86 },
-  { id:'final',    label:'Finalising your personal blend',      barStart:86, barEnd:100},
+  { id:'baseline',   label:'Detecting tremor baseline',             barStart:0,  barEnd:10  },
+  { id:'vibro',      label:'Testing vibrotactile 100 Hz',           barStart:10, barEnd:26  },
+  { id:'gamma',      label:'Testing gamma 40 Hz',                   barStart:26, barEnd:42  },
+  { id:'binaural',   label:'Matching binaural beat to tremor',      barStart:42, barEnd:56  },
+  { id:'binaural35', label:'Testing 35 Hz gamma binaural beat',     barStart:56, barEnd:70  },
+  { id:'noise',      label:'Testing stochastic resonance noise',    barStart:70, barEnd:82  },
+  { id:'final',      label:'Finalising your personal blend',        barStart:82, barEnd:100 },
 ];
 
 // ── Application state ─────────────────────────────────────────────
@@ -559,8 +561,8 @@ let sleepHandle = null;
 const N = {};
 
 // Per-channel results
-const helpful  = { v:false, g:false, b:false, n:false };
-const bestGain = { v:TEST_GAIN, g:TEST_GAIN, b:TEST_GAIN, n:0.032 };
+const helpful  = { v:false, g:false, b:false, b2:false, n:false };
+const bestGain = { v:TEST_GAIN, g:TEST_GAIN, b:TEST_GAIN, b2:TEST_GAIN, n:0.032 };
 
 // Motion / tremor
 const BUF_N   = 128;
@@ -650,8 +652,8 @@ function makeGamma(hz = 40) {
   N.g = { g, car, mod };
 }
 
-function makeBinaural(beat = 6) {
-  tearCh('b');
+function makeBinaural(beat = 6, key = 'b') {
+  tearCh(key);
   const g   = ctx.createGain(); g.gain.value = 0; g.connect(master);
   const mrg = ctx.createChannelMerger(2); mrg.connect(g);
   const lO  = ctx.createOscillator(); lO.type = 'sine'; lO.frequency.value = 200;
@@ -660,7 +662,7 @@ function makeBinaural(beat = 6) {
   const rO  = ctx.createOscillator(); rO.type = 'sine'; rO.frequency.value = 200 + beat;
   const rG  = ctx.createGain(); rG.gain.value = 1;
   rO.connect(rG); rG.connect(mrg, 0, 1); rO.start();
-  N.b = { g, lO, rO };
+  N[key] = { g, lO, rO };
 }
 
 function makeNoise() {
@@ -693,7 +695,7 @@ function tearCh(k) {
   delete N[k];
 }
 
-function tearAll() { ['v','g','b','n'].forEach(tearCh); }
+function tearAll() { ['v','g','b','b2','n'].forEach(tearCh); }
 
 // ── Motion / tremor detection ─────────────────────────────────────
 function startMotion() {
@@ -776,9 +778,9 @@ async function testChannel(chKey) {
   setLabel(labelFor(chKey) + ': ramping up…');
   const ok2 = await sleep(9000); if (!ok2 || !active) return 'skipped';
 
-  // 3. Measure for 18 seconds
+  // 3. Measure for 35 seconds
   setLabel(labelFor(chKey) + ': measuring effect…');
-  const testRms = await sampleRms(18000);
+  const testRms = await sampleRms(35000);
   if (!active) return 'skipped';
 
   if (testRms > baseline * (1 + HARMFUL_DELTA)) {
@@ -799,12 +801,12 @@ async function testChannel(chKey) {
 
   // 4. Helpful — find minimum effective volume
   setLabel(labelFor(chKey) + ': helpful! Finding minimum effective volume…');
-  bestGain[chKey] = await findMinGain(chKey, TEST_GAIN, 16000);
+  bestGain[chKey] = await findMinGain(chKey, TEST_GAIN, 25000);
   return 'helpful';
 }
 
 function labelFor(k) {
-  return { v:'100 Hz vibrotactile', g:'40 Hz gamma', b:'Binaural beat', n:'Stochastic noise' }[k];
+  return { v:'100 Hz vibrotactile', g:'40 Hz gamma', b:'Binaural beat', b2:'35 Hz binaural beat', n:'Stochastic noise' }[k];
 }
 
 // ── Main session runner (async) ───────────────────────────────────
@@ -812,7 +814,7 @@ async function runSession() {
 
   // ── Phase 0: Baseline ─────────────────────────────────────────
   setPhase('baseline','active');
-  animBar(0, 14, 45000);
+  animBar(0, 10, 45000);
   setLabel('Hold your phone in your tremoring hand…');
 
   // Wait up to 90 seconds for a confirmed tremor reading.
@@ -852,46 +854,57 @@ async function runSession() {
     await sleep(3000); if (!active) return;
   }
 
-  setPct(14);
+  setPct(10);
 
   // Start master gain low — nothing should be audible yet
   ramp(master, 0.28, 3);
 
   // ── Phase 1: Vibrotactile 100 Hz ──────────────────────────────
   setPhase('vibro','active');
-  animBar(14, 33, 55000);
+  animBar(10, 26, 80000);
   makeVibro(100);
   const vibroResult = await testChannel('v');
   helpful.v  = vibroResult === 'helpful';
   setPhase('vibro', helpful.v ? 'done' : 'skipped');
-  setPct(33);
+  setPct(26);
   if (!active) return;
 
   // ── Phase 2: Gamma 40 Hz ──────────────────────────────────────
   setPhase('gamma','active');
-  animBar(33, 54, 55000);
+  animBar(26, 42, 80000);
   makeGamma(40);
   const gammaResult = await testChannel('g');
   helpful.g  = gammaResult === 'helpful';
   setPhase('gamma', helpful.g ? 'done' : 'skipped');
-  setPct(54);
+  setPct(42);
   if (!active) return;
 
   // ── Phase 3: Binaural beat (tuned to detected tremor Hz) ──────
   setPhase('binaural','active');
-  animBar(54, 72, 45000);
+  animBar(42, 56, 80000);
   const beat = Math.max(3, Math.min(12, tHz));
-  makeBinaural(beat);
+  makeBinaural(beat, 'b');
   setLabel(`Binaural beat set to your tremor frequency (${tHz.toFixed(1)} Hz)…`);
   const binResult = await testChannel('b');
   helpful.b   = binResult === 'helpful';
   setPhase('binaural', helpful.b ? 'done' : 'skipped');
-  setPct(72);
+  setPct(56);
+  if (!active) return;
+
+  // ── Phase 3b: 35 Hz gamma binaural beat (Calvano 2023) ───────
+  setPhase('binaural35','active');
+  animBar(56, 70, 80000);
+  makeBinaural(35, 'b2');
+  setLabel('Testing 35 Hz gamma binaural beat…');
+  const bin35Result = await testChannel('b2');
+  helpful.b2  = bin35Result === 'helpful';
+  setPhase('binaural35', helpful.b2 ? 'done' : 'skipped');
+  setPct(70);
   if (!active) return;
 
   // ── Phase 4: Stochastic pink noise ────────────────────────────
   setPhase('noise','active');
-  animBar(72, 86, 30000);
+  animBar(70, 82, 45000);
   makeNoise();
   // Noise is always sub-perceptual (max gain 0.05) — scaled to detected tremor
   const noiseGain = Math.min(0.05, Math.max(0.015, tRms * 0.048));
@@ -899,9 +912,9 @@ async function runSession() {
 
   setLabel('Adding stochastic resonance noise (sub-threshold)…');
   ramp(N.n.g, noiseGain, 5); // very slow fade-in — barely perceptible
-  const ok = await sleep(22000); if (!ok || !active) return;
+  const ok = await sleep(35000); if (!ok || !active) return;
 
-  const noiseRms = await sampleRms(6000);
+  const noiseRms = await sampleRms(10000);
   if (noiseRms > baseline * (1 + HARMFUL_DELTA)) {
     ramp(N.n.g, 0, 2);
     helpful.n = false;
@@ -910,12 +923,12 @@ async function runSession() {
     helpful.n = true;
     setPhase('noise','done');
   }
-  setPct(86);
+  setPct(82);
   if (!active) return;
 
   // ── Phase 5: Finalise ─────────────────────────────────────────
   setPhase('final','active');
-  animBar(86, 100, 18000);
+  animBar(82, 100, 18000);
   setLabel('Finalising your personal blend…');
 
   // If nothing proved helpful (no motion sensor, very mild tremor),
@@ -943,10 +956,11 @@ function complete() {
   clearInterval(barIntv);
 
   const activeChs = [];
-  if (helpful.v) activeChs.push('Vibrotactile 100 Hz');
-  if (helpful.g) activeChs.push('Gamma 40 Hz');
-  if (helpful.b) activeChs.push('Binaural ' + tHz.toFixed(1) + ' Hz');
-  if (helpful.n) activeChs.push('Stochastic noise');
+  if (helpful.v)  activeChs.push('Vibrotactile 100 Hz');
+  if (helpful.g)  activeChs.push('Gamma 40 Hz');
+  if (helpful.b)  activeChs.push('Binaural ' + tHz.toFixed(1) + ' Hz');
+  if (helpful.b2) activeChs.push('Binaural 35 Hz');
+  if (helpful.n)  activeChs.push('Stochastic noise');
 
   const el = document.getElementById('complete');
   el.style.display = 'block';
@@ -977,12 +991,13 @@ async function begin() {
   active = true;
 
   // Reset
-  ['v','g','b','n'].forEach(k => { helpful[k]=false; bestGain[k]=TEST_GAIN; });
+  ['v','g','b','b2','n'].forEach(k => { helpful[k]=false; bestGain[k]=TEST_GAIN; });
   PHASES.forEach(p => { pSt[p.id]='pending'; });
   motBuf=[]; tHz=6; tRms=0; baseline=0.5;
 
-  document.getElementById('beginBtn').style.display  = 'none';
-  document.getElementById('prog').style.display      = 'block';
+  document.getElementById('beginBtn').style.display   = 'none';
+  document.getElementById('sessionTime').style.display = 'none';
+  document.getElementById('prog').style.display       = 'block';
   document.getElementById('stopBtn').style.display   = 'block';
   document.getElementById('stopBtn').textContent     = 'Pause Session';
   document.getElementById('clearBtn').style.display  = 'block';
@@ -1026,11 +1041,12 @@ function clearSession() {
 
   stopKeepalive();
 
-  document.getElementById('beginBtn').style.display  = 'block';
-  document.getElementById('prog').style.display      = 'none';
-  document.getElementById('stopBtn').style.display   = 'none';
-  document.getElementById('stopBtn').textContent     = 'Pause Session';
-  document.getElementById('clearBtn').style.display  = 'none';
+  document.getElementById('beginBtn').style.display    = 'block';
+  document.getElementById('sessionTime').style.display = 'block';
+  document.getElementById('prog').style.display        = 'none';
+  document.getElementById('stopBtn').style.display     = 'none';
+  document.getElementById('stopBtn').textContent       = 'Pause Session';
+  document.getElementById('clearBtn').style.display    = 'none';
   document.getElementById('tips').style.display      = 'none';
   document.getElementById('complete').style.display  = 'none';
   document.getElementById('exportBtn').style.display = 'none';
@@ -1191,6 +1207,16 @@ async function exportAudio() {
     lO.connect(lG); lG.connect(mrg,0,0); lO.start(0); lO.stop(DUR);
     const rO   = off.createOscillator(); rO.type='sine'; rO.frequency.value=200+beat;
     const rG   = off.createGain(); rG.gain.value=bestGain.b;
+    rO.connect(rG); rG.connect(mrg,0,1); rO.start(0); rO.stop(DUR);
+  }
+
+  if (helpful.b2) {
+    const mrg  = off.createChannelMerger(2); mrg.connect(mg);
+    const lO   = off.createOscillator(); lO.type='sine'; lO.frequency.value=200;
+    const lG   = off.createGain(); lG.gain.value=bestGain.b2;
+    lO.connect(lG); lG.connect(mrg,0,0); lO.start(0); lO.stop(DUR);
+    const rO   = off.createOscillator(); rO.type='sine'; rO.frequency.value=235; // 200 + 35
+    const rG   = off.createGain(); rG.gain.value=bestGain.b2;
     rO.connect(rG); rG.connect(mrg,0,1); rO.start(0); rO.stop(DUR);
   }
 
