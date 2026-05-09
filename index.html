@@ -7,7 +7,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="description" content="STABLE — Free bone conduction therapy for tremor relief. Adapts to you automatically.">
+  <meta name="description" content="STABLE: Free bone conduction therapy for tremor relief. Adapts to you automatically.">
   <title>STABLE</title>
   <link rel="manifest" href="manifest.json">
   <style>
@@ -364,6 +364,45 @@
     .tog.on { background: var(--accent); }
     .tog.on::after { transform: translateX(18px); }
 
+    /* ── Export button ── */
+    .export-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      margin-top: 16px;
+      padding: 14px;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 13px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-dim);
+      cursor: pointer;
+      transition: all 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .export-btn:hover { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
+    .export-btn:active { transform: scale(0.98); }
+    .export-btn:disabled { opacity: 0.5; cursor: default; }
+
+    /* ── iPhone instructions card ── */
+    .iphone-card {
+      display: none;
+      background: #fff8ed;
+      border: 1px solid #fde68a;
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-top: 10px;
+      font-size: 12px;
+      color: #78350f;
+      line-height: 1.7;
+    }
+
+    .iphone-card strong { display: block; margin-bottom: 4px; color: #92400e; }
+
     /* ── Footer ── */
     footer {
       position: fixed;
@@ -395,7 +434,7 @@
 
   <!-- Disclaimer — always visible -->
   <div class="disclaimer">
-    <div class="disclaimer-title">Wellness Tool — Important Notice</div>
+    <div class="disclaimer-title">Wellness Tool: Important Notice</div>
     <p>STABLE is a free personal wellness tool, not a medical device. It has not been approved or evaluated by the FDA, CE, or any regulatory body, and does not diagnose, treat, or cure any condition. Do not use as a substitute for prescribed medication or neurological care.</p>
     <details>
       <summary>Full disclaimer ▾</summary>
@@ -423,6 +462,17 @@
     <div class="complete-title">Your frequencies are ready</div>
     <div class="complete-note" id="completeNote"></div>
     <div class="pills" id="pills"></div>
+
+    <button class="export-btn" id="exportBtn" onclick="exportAudio()" style="display:none">
+      <span>💾</span> Save audio file to loop offline
+    </button>
+    <div class="iphone-card" id="iphoneCard">
+      <strong>iPhone: how to play on repeat with screen locked</strong>
+      1. Tap "Save audio file" above and choose Save to Files<br>
+      2. Install <strong>VLC</strong> (free, App Store), which plays WAV files and loops with screen locked<br>
+      3. Open the file in VLC, tap the repeat icon, then lock your screen<br>
+      The audio will continue playing through your bone conduction headphones.
+    </div>
   </div>
 
   <!-- Stop -->
@@ -434,7 +484,7 @@
       <span class="tip-icon">🎧</span>
       <div class="tip-body">
         <strong>Set headphone volume to maximum</strong>
-        Higher headphone volume means stronger mechanical vibration through bone — essential for the therapeutic effect. The app mixes audio at a safe level internally.
+        Higher headphone volume means stronger mechanical vibration through bone, essential for the therapeutic effect. The app mixes audio at a safe level internally.
       </div>
     </div>
     <div class="tip" id="lockTip" style="display:none">
@@ -442,7 +492,7 @@
       <div class="tip-body lock-row">
         <div>
           <strong>Keep playing when screen locks</strong>
-          Registers with your phone's media system. Works on most Android browsers. See README for iPhone guidance.
+          Uses a background audio session to stay alive on Android (Chrome). On iPhone, use the Save button above.
         </div>
         <div class="tog" id="lockTog" onclick="toggleLock()" style="margin-left:14px"></div>
       </div>
@@ -709,22 +759,22 @@ async function testChannel(chKey) {
 
   // 1. Start quiet — let user hear it begin without a jolt
   ramp(ch.g, 0.08, 2.5);
-  setLabel(labelFor(chKey) + ' — starting quietly…');
+  setLabel(labelFor(chKey) + ': starting quietly…');
   const ok1 = await sleep(10000); if (!ok1 || !active) return 'skipped';
 
   // 2. Ramp up to test level
   ramp(ch.g, TEST_GAIN, 7);
-  setLabel(labelFor(chKey) + ' — ramping up…');
+  setLabel(labelFor(chKey) + ': ramping up…');
   const ok2 = await sleep(9000); if (!ok2 || !active) return 'skipped';
 
   // 3. Measure for 18 seconds
-  setLabel(labelFor(chKey) + ' — measuring effect…');
+  setLabel(labelFor(chKey) + ': measuring effect…');
   const testRms = await sampleRms(18000);
   if (!active) return 'skipped';
 
   if (testRms > baseline * (1 + HARMFUL_DELTA)) {
     // This channel is making things worse — mute it
-    setLabel(labelFor(chKey) + ' — not helpful for you, moving on');
+    setLabel(labelFor(chKey) + ': not helpful for you, moving on');
     ramp(ch.g, 0, 2);
     await sleep(2500); if (!active) return 'harmful';
     return 'harmful';
@@ -732,14 +782,14 @@ async function testChannel(chKey) {
 
   if (testRms >= baseline * (1 - HELPFUL_DELTA)) {
     // No meaningful improvement — skip
-    setLabel(labelFor(chKey) + ' — no clear effect, moving on');
+    setLabel(labelFor(chKey) + ': no clear effect, moving on');
     ramp(ch.g, 0, 2);
     await sleep(2500); if (!active) return 'skipped';
     return 'skipped';
   }
 
   // 4. Helpful — find minimum effective volume
-  setLabel(labelFor(chKey) + ' — helpful! Finding minimum effective volume…');
+  setLabel(labelFor(chKey) + ': helpful! Finding minimum effective volume…');
   bestGain[chKey] = await findMinGain(chKey, TEST_GAIN, 16000);
   return 'helpful';
 }
@@ -785,11 +835,11 @@ async function runSession() {
   if (tremorFound) {
     baseline = baseArr.reduce((a,b)=>a+b,0)/baseArr.length;
     setPhase('baseline','done');
-    setLabel('Tremor detected — beginning frequency tests');
+    setLabel('Tremor detected: beginning frequency tests');
   } else {
     baseline = Math.max(tRms, 0.5);
     setPhase('baseline','skipped');
-    setLabel('No tremor detected — applying evidence-based defaults');
+    setLabel('No tremor detected: applying evidence-based defaults');
     await sleep(3000); if (!active) return;
   }
 
@@ -903,8 +953,11 @@ function complete() {
     pillsEl.appendChild(p);
   });
 
-  // Show lock toggle
-  document.getElementById('lockTip').style.display = 'flex';
+  // Show export button + lock toggle, detect iPhone
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  document.getElementById('exportBtn').style.display  = 'flex';
+  document.getElementById('iphoneCard').style.display = isIOS ? 'block' : 'none';
+  document.getElementById('lockTip').style.display    = 'flex';
   registerMedia();
 }
 
@@ -928,6 +981,7 @@ async function begin() {
 
   buildPhaseList();
   startMotion();
+  startKeepalive();   // iOS audio session workaround
   await runSession();
 }
 
@@ -940,11 +994,15 @@ function end() {
   window.removeEventListener('devicemotion', onMotion);
   motBuf=[]; tHz=6; tRms=0;
 
+  stopKeepalive();
+
   document.getElementById('beginBtn').style.display  = 'block';
   document.getElementById('prog').style.display      = 'none';
   document.getElementById('stopBtn').style.display   = 'none';
   document.getElementById('tips').style.display      = 'none';
   document.getElementById('complete').style.display  = 'none';
+  document.getElementById('exportBtn').style.display = 'none';
+  document.getElementById('iphoneCard').style.display= 'none';
   document.getElementById('lockTip').style.display   = 'none';
   document.getElementById('barFill').style.width     = '0%';
   document.getElementById('barPct').textContent      = '0%';
@@ -980,7 +1038,7 @@ function buildPhaseList() {
   });
 }
 
-const DOT_SYMBOLS = { pending:'○', active:'◉', done:'✓', skipped:'—' };
+const DOT_SYMBOLS = { pending:'○', active:'◉', done:'✓', skipped:'-' };
 
 function updatePhaseList() {
   PHASES.forEach(p => {
@@ -1010,6 +1068,150 @@ function registerMedia() {
   });
   navigator.mediaSession.setActionHandler('play',  () => ctx?.resume?.());
   navigator.mediaSession.setActionHandler('pause', () => {});
+}
+
+// ── iOS Keepalive ─────────────────────────────────────────────────
+// iOS suspends the Web Audio API when the screen locks unless an
+// <audio> element is actively playing. We generate a minimal
+// near-silent WAV (amplitude 0.01%, inaudible) and loop it.
+// This is a best-effort workaround; save the audio file for
+// guaranteed lock-screen playback on iPhone.
+let keepaliveEl = null;
+
+function makeSilentWavUri() {
+  const rate = 8000, len = rate; // 1-second, 8 kHz, mono
+  const buf  = new ArrayBuffer(44 + len * 2);
+  const v    = new DataView(buf);
+  const s    = (off, str) => { for (let i=0;i<str.length;i++) v.setUint8(off+i, str.charCodeAt(i)); };
+  s(0,'RIFF'); v.setUint32(4, 36 + len*2, true);
+  s(8,'WAVE'); s(12,'fmt ');
+  v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,1,true);
+  v.setUint32(24,rate,true); v.setUint32(28,rate*2,true);
+  v.setUint16(32,2,true); v.setUint16(34,16,true);
+  s(36,'data'); v.setUint32(40, len*2, true);
+  // Near-silent 1 Hz sine (amplitude 3/32768 ≈ 0.009%, completely inaudible)
+  for (let i=0; i<len; i++) {
+    v.setInt16(44 + i*2, Math.round(Math.sin(2*Math.PI*i/rate) * 3), true);
+  }
+  const bytes = new Uint8Array(buf);
+  let bin = ''; for (let i=0;i<bytes.length;i++) bin += String.fromCharCode(bytes[i]);
+  return 'data:audio/wav;base64,' + btoa(bin);
+}
+
+function startKeepalive() {
+  if (keepaliveEl) return;
+  keepaliveEl = document.createElement('audio');
+  keepaliveEl.src    = makeSilentWavUri();
+  keepaliveEl.loop   = true;
+  keepaliveEl.volume = 0.001;
+  document.body.appendChild(keepaliveEl);
+  keepaliveEl.play().catch(() => {}); // requires user-gesture context — we have one from Begin
+}
+
+function stopKeepalive() {
+  if (!keepaliveEl) return;
+  keepaliveEl.pause();
+  keepaliveEl.remove();
+  keepaliveEl = null;
+}
+
+// ── Export personalised audio as WAV ─────────────────────────────
+// Renders the exact channels and volumes that proved helpful for
+// this person into a 3-minute WAV file. Can be opened in VLC
+// (free, iOS/Android/desktop) and set to repeat with screen locked.
+async function exportAudio() {
+  const btn = document.getElementById('exportBtn');
+  btn.disabled   = true;
+  btn.textContent = 'Rendering… this takes a few seconds';
+
+  const DUR  = 180; // 3 minutes
+  const rate = 44100;
+  const off  = new OfflineAudioContext(2, rate * DUR, rate);
+  const mg   = off.createGain();
+  mg.gain.value = 0.65; // match session master volume
+  mg.connect(off.destination);
+
+  function addOsc(freq, type, gain) {
+    const o = off.createOscillator(); o.type = type; o.frequency.value = freq;
+    const g = off.createGain(); g.gain.value = gain;
+    o.connect(g); g.connect(mg); o.start(0); o.stop(DUR);
+  }
+
+  if (helpful.v) {
+    addOsc(100, 'sine', bestGain.v);
+  }
+
+  if (helpful.g) {
+    // 200 Hz carrier AM-modulated at 40 Hz
+    const car = off.createOscillator(); car.type = 'sine'; car.frequency.value = 200;
+    const cg  = off.createGain(); cg.gain.value = bestGain.g;
+    car.connect(cg); cg.connect(mg); car.start(0); car.stop(DUR);
+    const mod = off.createOscillator(); mod.frequency.value = 40;
+    const mog = off.createGain(); mog.gain.value = 0.5;
+    mod.connect(mog); mog.connect(cg.gain); mod.start(0); mod.stop(DUR);
+  }
+
+  if (helpful.b) {
+    const beat = Math.max(3, Math.min(12, tHz));
+    const mrg  = off.createChannelMerger(2); mrg.connect(mg);
+    const lO   = off.createOscillator(); lO.type='sine'; lO.frequency.value=200;
+    const lG   = off.createGain(); lG.gain.value=bestGain.b;
+    lO.connect(lG); lG.connect(mrg,0,0); lO.start(0); lO.stop(DUR);
+    const rO   = off.createOscillator(); rO.type='sine'; rO.frequency.value=200+beat;
+    const rG   = off.createGain(); rG.gain.value=bestGain.b;
+    rO.connect(rG); rG.connect(mrg,0,1); rO.start(0); rO.stop(DUR);
+  }
+
+  if (helpful.n) {
+    const len = rate * 4;
+    const buf = off.createBuffer(1, len, rate);
+    const d   = buf.getChannelData(0);
+    let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
+    for (let i=0;i<len;i++) {
+      const w=Math.random()*2-1;
+      b0=0.99886*b0+w*0.0555179; b1=0.99332*b1+w*0.0750759;
+      b2=0.96900*b2+w*0.1538520; b3=0.86650*b3+w*0.3104856;
+      b4=0.55000*b4+w*0.5329522; b5=-0.7616*b5-w*0.0168980;
+      d[i]=(b0+b1+b2+b3+b4+b5+b6+w*0.5362)*0.11;
+      b6=w*0.115926;
+    }
+    const src = off.createBufferSource(); src.buffer=buf; src.loop=true;
+    const ng  = off.createGain(); ng.gain.value=bestGain.n;
+    src.connect(ng); ng.connect(mg); src.start(0);
+  }
+
+  try {
+    const rendered = await off.startRendering();
+    const wav      = encodeWav(rendered);
+    const blob     = new Blob([wav], { type:'audio/wav' });
+    const url      = URL.createObjectURL(blob);
+    const a        = document.createElement('a');
+    a.href         = url;
+    a.download     = 'STABLE-session.wav';
+    a.click();
+    URL.revokeObjectURL(url);
+    btn.textContent = '✓ Saved: open in VLC and set to repeat';
+  } catch(e) {
+    btn.textContent = 'Export failed: try again';
+  }
+  btn.disabled = false;
+}
+
+// WAV encoder
+function encodeWav(ab) {
+  const nCh=ab.numberOfChannels, sr=ab.sampleRate, len=ab.length, bps=2, blk=nCh*bps;
+  const buf=new ArrayBuffer(44+len*blk); const v=new DataView(buf);
+  const s=(off,str)=>{for(let i=0;i<str.length;i++)v.setUint8(off+i,str.charCodeAt(i));};
+  s(0,'RIFF'); v.setUint32(4,36+len*blk,true); s(8,'WAVE'); s(12,'fmt ');
+  v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,nCh,true);
+  v.setUint32(24,sr,true); v.setUint32(28,sr*blk,true); v.setUint16(32,blk,true); v.setUint16(34,16,true);
+  s(36,'data'); v.setUint32(40,len*blk,true);
+  let off=44;
+  for (let i=0;i<len;i++) for (let c=0;c<nCh;c++) {
+    const x=Math.max(-1,Math.min(1,ab.getChannelData(c)[i]));
+    v.setInt16(off,x<0?x*0x8000:x*0x7FFF,true); off+=2;
+  }
+  return buf;
 }
 </script>
 </body>
